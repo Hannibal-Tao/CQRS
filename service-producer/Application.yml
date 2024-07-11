@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: service-producer
+  cloud:
+    zookeeper:
+      discovery:
+        enabled: true
+logging:
+  level:
+    org.apache.zookeeper.ClientCnxn: WARN

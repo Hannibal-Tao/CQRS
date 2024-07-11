@@ -1,4 +1,3 @@
-version: '3.7'
 
 services:
   zookeeper-1:
@@ -56,3 +55,9 @@ services:
       context: service-producer
     ports:
       - "8083:8080"
+  consumer:
+    image: service-consumer
+    build:
+      context: serviceconsumer
+    ports:
+      - "8084:8080"

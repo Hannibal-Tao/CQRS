@@ -1,0 +1,7 @@
+logging:
+  level:
+    org.apache.zookeeper.ClientCnxn: WARN
+spring:
+  cloud:
+    zookeeper:
+      connect-string: zookeeper-1:2181,zookeeper-2:2181,zookeeper-3:2181
