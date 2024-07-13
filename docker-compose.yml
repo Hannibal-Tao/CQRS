@@ -1,9 +1,13 @@
 networks:
   zookeeper:
     driver: bridge
+  producer-zookeeper:
+    driver: bridge
   producer:
     driver: bridge
   consumer:
+    driver: bridge
+  consumer-zookeeper:
     driver: bridge
 
 services:
@@ -17,6 +21,8 @@ services:
       ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888
     networks:
       - zookeeper
+      - producer-zookeeper
+      - consumer-zookeeper
 
   zookeeper-2:
     image: confluentinc/cp-zookeeper:latest
@@ -28,6 +34,8 @@ services:
       ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888
     networks:
       - zookeeper
+      - producer-zookeeper
+      - consumer-zookeeper
 
   zookeeper-3:
     image: confluentinc/cp-zookeeper:latest
@@ -39,6 +47,8 @@ services:
       ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zoozookeeper-2:2888:3888;zookeeper-3:2888:3888
     networks:
       - zookeeper
+      - producer-zookeeper
+      - consumer-zookeeper
 
   zk_web:
     image: elkozmon/zoonavigator:latest
@@ -65,8 +75,8 @@ services:
       - zookeeper-2
       - zookeeper-3
     networks:
-      - zookeeper
       - producer
+      - producer-zookeeper
 
   producer-2:
     image: producer
@@ -79,8 +89,8 @@ services:
       - zookeeper-2
       - zookeeper-3
     networks:
-      - zookeeper
       - producer
+      - producer-zookeeper
 
   producer-3:
     image: producer
@@ -93,8 +103,8 @@ services:
       - zookeeper-2
       - zookeeper-3
     networks:
-      - zookeeper
       - producer
+      - producer-zookeeper
 
   consumer:
     image: service-consumer
@@ -107,5 +117,6 @@ services:
       - zookeeper-2
       - zookeeper-3
     networks:
-      - zookeeper
       - consumer
+      - consumer-zookeeper
+      - producer-zookeeper
