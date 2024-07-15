@@ -10,10 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class GreetingController {
  
     @Autowired
-    private Client helloWorldClient;
+    private static Client helloWorldClient;
 
     @GetMapping("/get-greeting")
-    public String greeting() {
+    public static String greeting() {
         return helloWorldClient.produce();
     }
 
