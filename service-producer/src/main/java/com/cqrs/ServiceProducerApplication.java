@@ -12,6 +12,7 @@ public class ServiceProducerApplication {
 	@Autowired
 	private LeaderInitiatorFactoryBean leaderInitiator;
 
+
 	public static void main(String[] args) {
 		SpringApplication.run(ServiceProducerApplication.class, args);
 	}
