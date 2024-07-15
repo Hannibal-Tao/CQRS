@@ -26,7 +26,7 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_SERVER_ID: 3
-      ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zoozookeeper-2:2888:3888;zookeeper-3:2888:3888
+      ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888
   zk_web:
     image: elkozmon/zoonavigator:latest
     container_name: zoonavigator
@@ -39,18 +39,21 @@ services:
     links:
       - zookeeper-1
   producer-1:
+    hostname: producer-1
     image: producer
     build:
       context: service-producer
     ports:
       - "8081:8080"
   producer-2:
+    hostname: producer-2
     image: producer
     build:
       context: service-producer
     ports:
       - "8082:8080"
   producer-3:
+    hostname: producer-3
     image: producer
     build:
       context: service-producer

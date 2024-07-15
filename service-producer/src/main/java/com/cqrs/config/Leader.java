@@ -1,5 +1,7 @@
 package com.cqrs.config;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.zookeeper.KeeperException;
 import org.slf4j.Logger;
@@ -14,12 +16,20 @@ import static org.slf4j.LoggerFactory.*;
 public class Leader implements Candidate {
     private final Logger logger = getLogger(Leader.class);
     private final CuratorFramework curatorClient;
+    private final String hostname;
     private boolean isLeader = false;
     private Integer ID = 0;
     private boolean leaderDesignated = false;
 
     public Leader(CuratorFramework curatorClient) {
-        this.curatorClient = curatorClient;
+      String hostname1;
+      this.curatorClient = curatorClient;
+      try {
+          hostname1 = InetAddress.getLocalHost().getHostName();
+      } catch (UnknownHostException e) {
+          hostname1 = "N/A";
+      }
+      this.hostname = hostname1;
     }
 
 
@@ -30,7 +40,7 @@ public class Leader implements Candidate {
 
     @Override
     public String getId() {
-        return (ID++).toString();
+      return this.hostname;
     }
 
     @Override
@@ -52,16 +62,18 @@ public class Leader implements Candidate {
 
     private void becomeLeader() {
         try {
-            if(!leaderDesignated){
-                // Create a leader node in Zookeeper
-                curatorClient.create().forPath("/services/service-producer-1/leader");
-                isLeader = true;
-                logger.info("Became the leader");
-            }
+            // Create a leader node in Zookeeper
+            curatorClient.create().forPath("/services/service-producer-1/leader-node",
+                this.hostname.getBytes());
+            isLeader = true;
+            logger.info("Became the leader");
         } catch (KeeperException.NodeExistsException e) {
             // Node already exists, this instance is the leader
             isLeader = true;
-            logger.info("Became the leader (node already existed)" + e.getMessage() + " client: " + curatorClient);
+            logger.error(
+                "Became the leader (node already existed) client: {}, {}",
+                e.getMessage(), curatorClient);
+
         } catch (Exception e) {
             logger.error("Error creating leader node in Zookeeper", e);
         }
