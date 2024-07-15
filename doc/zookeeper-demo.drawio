@@ -1,0 +1,43 @@
+<mxfile modified="2024-07-09T13:20:17.898Z" host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="i4Hh2qrUcRqQ9YUkblev" version="24.6.4" type="device">
+  <diagram id="Ht1M8jgEwFfnCIfOTk4-" name="Page-1">
+    <mxGraphModel dx="1434" dy="761" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="PdLHzLEQsJgN3PbCNlsI-1" value="ZooKeeper" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.application_discovery_service;fillColor=#5294CF;gradientColor=none;" vertex="1" parent="1">
+          <mxGeometry x="700" y="130" width="76.5" height="93" as="geometry" />
+        </mxCell>
+        <mxCell id="PdLHzLEQsJgN3PbCNlsI-2" value="ZooKeeper" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.application_discovery_service;fillColor=#5294CF;gradientColor=none;" vertex="1" parent="1">
+          <mxGeometry x="420" y="130" width="76.5" height="93" as="geometry" />
+        </mxCell>
+        <mxCell id="PdLHzLEQsJgN3PbCNlsI-3" value="ZooKeeper" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.application_discovery_service;fillColor=#5294CF;gradientColor=none;" vertex="1" parent="1">
+          <mxGeometry x="566" y="130" width="76.5" height="93" as="geometry" />
+        </mxCell>
+        <mxCell id="PdLHzLEQsJgN3PbCNlsI-4" value="" style="swimlane;startSize=0;" vertex="1" parent="1">
+          <mxGeometry x="380" y="100" width="460" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="PdLHzLEQsJgN3PbCNlsI-5" value="Provider Service&amp;nbsp;1" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;fontColor=#4277BB;labelBackgroundColor=default;fontSize=12;spacingTop=3;image=img/lib/ibm/applications/microservice.svg;" vertex="1" parent="1">
+          <mxGeometry x="338" y="430" width="82.2" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="PdLHzLEQsJgN3PbCNlsI-6" value="Provider Service&amp;nbsp;2" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;fontColor=#4277BB;labelBackgroundColor=default;fontSize=12;spacingTop=3;image=img/lib/ibm/applications/microservice.svg;" vertex="1" parent="1">
+          <mxGeometry x="460" y="430" width="82.2" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="PdLHzLEQsJgN3PbCNlsI-7" value="Provider Service&amp;nbsp;3" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;fontColor=#4277BB;labelBackgroundColor=default;fontSize=12;spacingTop=3;image=img/lib/ibm/applications/microservice.svg;" vertex="1" parent="1">
+          <mxGeometry x="600" y="430" width="82.2" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="PdLHzLEQsJgN3PbCNlsI-8" value="Consumer Service" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;fontColor=#4277BB;labelBackgroundColor=default;fontSize=12;spacingTop=3;image=img/lib/ibm/applications/microservice.svg;" vertex="1" parent="1">
+          <mxGeometry x="980" y="430" width="82.2" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="PdLHzLEQsJgN3PbCNlsI-9" value="" style="swimlane;startSize=0;" vertex="1" parent="1">
+          <mxGeometry x="296.5" y="390" width="433.5" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="PdLHzLEQsJgN3PbCNlsI-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.289;entryY=1.018;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="PdLHzLEQsJgN3PbCNlsI-9" target="PdLHzLEQsJgN3PbCNlsI-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="PdLHzLEQsJgN3PbCNlsI-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.603;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="PdLHzLEQsJgN3PbCNlsI-8" target="PdLHzLEQsJgN3PbCNlsI-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
