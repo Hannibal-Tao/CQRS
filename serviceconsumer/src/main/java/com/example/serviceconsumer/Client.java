@@ -1,5 +1,6 @@
 package com.example.serviceconsumer;
 
+import com.example.serviceconsumer.config.FeignConfig;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -18,7 +19,7 @@ public class Client {
     @Autowired
     private TheClient theClient;
 
-    @FeignClient(name = "service-producer")
+    @FeignClient(name = "service-producer-1", configuration = FeignConfig.class)
     interface TheClient {
  
         @RequestMapping(path = "/produce", method = RequestMethod.GET)
