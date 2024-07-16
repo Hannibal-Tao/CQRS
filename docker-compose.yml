@@ -44,7 +44,7 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_SERVER_ID: 3
-      ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zoozookeeper-2:2888:3888;zookeeper-3:2888:3888
+      ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888
     networks:
       - zookeeper
       - producer-zookeeper
@@ -65,6 +65,7 @@ services:
       - zookeeper
 
   producer-1:
+    hostname: producer-1
     image: producer
     build:
       context: service-producer
@@ -79,6 +80,7 @@ services:
       - producer-zookeeper
 
   producer-2:
+    hostname: producer-2
     image: producer
     build:
       context: service-producer
@@ -93,6 +95,7 @@ services:
       - producer-zookeeper
 
   producer-3:
+    hostname: producer-3
     image: producer
     build:
       context: service-producer
