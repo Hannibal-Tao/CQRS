@@ -1,4 +1,14 @@
-version: '3.7'
+networks:
+  zookeeper:
+    driver: bridge
+  producer-zookeeper:
+    driver: bridge
+  producer:
+    driver: bridge
+  consumer:
+    driver: bridge
+  consumer-zookeeper:
+    driver: bridge
 
 services:
   zookeeper-1:
@@ -9,6 +19,10 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_SERVER_ID: 1
       ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888
+    networks:
+      - zookeeper
+      - producer-zookeeper
+      - consumer-zookeeper
 
   zookeeper-2:
     image: confluentinc/cp-zookeeper:latest
@@ -18,7 +32,11 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_SERVER_ID: 2
       ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888
-  
+    networks:
+      - zookeeper
+      - producer-zookeeper
+      - consumer-zookeeper
+
   zookeeper-3:
     image: confluentinc/cp-zookeeper:latest
     ports:
@@ -27,6 +45,11 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_SERVER_ID: 3
       ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888
+    networks:
+      - zookeeper
+      - producer-zookeeper
+      - consumer-zookeeper
+
   zk_web:
     image: elkozmon/zoonavigator:latest
     container_name: zoonavigator
@@ -38,6 +61,9 @@ services:
       - zookeeper-1
     links:
       - zookeeper-1
+    networks:
+      - zookeeper
+
   producer-1:
     hostname: producer-1
     image: producer
@@ -45,6 +71,14 @@ services:
       context: service-producer
     ports:
       - "8081:8080"
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+      - zookeeper-3
+    networks:
+      - producer
+      - producer-zookeeper
+
   producer-2:
     hostname: producer-2
     image: producer
@@ -52,6 +86,14 @@ services:
       context: service-producer
     ports:
       - "8082:8080"
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+      - zookeeper-3
+    networks:
+      - producer
+      - producer-zookeeper
+
   producer-3:
     hostname: producer-3
     image: producer
@@ -59,3 +101,25 @@ services:
       context: service-producer
     ports:
       - "8083:8080"
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+      - zookeeper-3
+    networks:
+      - producer
+      - producer-zookeeper
+
+  consumer:
+    image: service-consumer
+    build:
+      context: serviceconsumer
+    ports:
+      - "8084:8080"
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+      - zookeeper-3
+    networks:
+      - consumer
+      - consumer-zookeeper
+      - producer-zookeeper
