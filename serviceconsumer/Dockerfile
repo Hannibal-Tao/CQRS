@@ -3,10 +3,10 @@ WORKDIR /serviceconsumer
 COPY pom.xml /serviceconsumer/pom.xml
 RUN mvn verify clean --fail-never
 COPY src /serviceconsumer/src
-RUN mvn clean package -P docker
+RUN mvn clean package -DskipTests
 
 
-FROM openjdk:17-jdk-slim
+FROM openjdk:21-jdk
 WORKDIR /serviceconsumer
 COPY --from=builder /serviceconsumer/target/*.jar app.jar
 RUN echo $(ls -al .)
