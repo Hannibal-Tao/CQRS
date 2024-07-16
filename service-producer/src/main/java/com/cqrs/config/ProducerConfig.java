@@ -1,5 +1,6 @@
 package com.cqrs.config;
 
+import jakarta.annotation.PreDestroy;
 import org.apache.curator.framework.CuratorFramework;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -23,5 +24,12 @@ public class ProducerConfig {
                     .setPath("/services/service-producer-1/")
                     .setCandidate(leader);
                     //.setRole("leader");
-}
+    }
+
+    @PreDestroy
+    public void destroy() throws Exception {
+        client.delete().forPath("/services/service-producer-1/leader-node");
+        System.out.println(
+                "Callback triggered - @PreDestroy.");
+    }
 }

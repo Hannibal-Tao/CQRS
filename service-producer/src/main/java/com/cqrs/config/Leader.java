@@ -57,6 +57,21 @@ public class Leader implements Candidate {
         logger.info("Leadership revoked for role: {}", getRole());
         isLeader = false;
         leaderDesignated = false;
+        try {
+            if(curatorClient.checkExists().watched().forPath("/services/service-producer-1/leader-node")!=null) {
+                try {
+                    curatorClient.delete().forPath("/services/service-producer-1/leader-node");
+                    logger.info("Deleted leader-node from onRevoked()");
+                } catch (Exception e) {
+                    logger.error("Unable to delete leader{}", e.getMessage());
+                }
+            }
+            else{
+                logger.info("Path 'leader-node' not found");
+            }
+        } catch (Exception e) {
+            logger.error("Unable to detect path{}", e.getMessage());
+        }
         // Release resources, stop processes, etc.
     }
 
