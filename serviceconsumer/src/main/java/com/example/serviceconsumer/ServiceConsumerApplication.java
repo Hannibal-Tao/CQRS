@@ -6,7 +6,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-public class ServiceConsumerApplication extends GreetingController {
+public class ServiceConsumerApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ServiceConsumerApplication.class, args);

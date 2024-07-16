@@ -8,9 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class MessageIntegrationTest {
-    public static void main(String[] args) {
-        testMessageFlow();
-    }
+
 
     @Autowired
     private static Client producer;
@@ -19,7 +17,7 @@ class MessageIntegrationTest {
     private static GreetingController consumer;
 
     @Test
-    static void testMessageFlow() {
+    void testMessageFlow() {
         // Step 1: Send a message from the service producer
         String message = producer.produce();
 
