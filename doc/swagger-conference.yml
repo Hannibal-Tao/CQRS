@@ -1,0 +1,86 @@
+openapi: 3.0.1
+info:
+  title: Modern Renting User Service
+  description: SpringBoot 3.x application
+  version: v0.0.1
+servers:
+  - url: http://localhost:8080
+    description: Generated server url
+security:
+  - Bearer Authentication: []
+paths:
+  /conferences:
+    get:
+      tags:
+        - conference-controller
+      operationId: read
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Conference'
+    post:
+      tags:
+        - conference-controller
+      operationId: create
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: name
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /conferences/tokens:
+    get:
+      tags:
+        - conference-controller
+      operationId: readToken
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Token'
+components:
+  schemas:
+    Conference:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    Token:
+      type: object
+      properties:
+        segment:
+          type: integer
+          format: int32
+        processorName:
+          type: string
+        tokenType:
+          type: string
+        owner:
+          type: string
+  securitySchemes:
+    Bearer Authentication:
+      type: http
+      scheme: bearer
