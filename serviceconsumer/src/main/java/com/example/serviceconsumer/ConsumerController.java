@@ -28,6 +28,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class ConsumerController {
 
     private KafkaProducer<String, String> kafkaProducer;
+    private KafkaConsumer<String, String> kafkaConsumer;
     private ObjectMapper mapper;
     private final Logger logger = getLogger(ConsumerController.class);
 
@@ -39,6 +40,13 @@ public class ConsumerController {
         kafkaProducer = new KafkaProducer<>(producerProps);
         mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+        Properties consumerProps = new Properties();
+        consumerProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka-1:29092,kafka-2:29093,kafka-3:29094");
+        consumerProps.put(ConsumerConfig.GROUP_ID_CONFIG, "my-group");
+        consumerProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        consumerProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        kafkaConsumer = new KafkaConsumer<>(consumerProps);
     }
 
 
@@ -60,25 +68,29 @@ public class ConsumerController {
         kafkaProducer.send(producerRecord);
         // Wait for the result on result-topic-1 (not implemented yet)
 
-        Properties consumerProps = new Properties();
-        consumerProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka-1:29092,kafka-2:29093,kafka-3:29094");
-        consumerProps.put(ConsumerConfig.GROUP_ID_CONFIG, "my-group");
-        consumerProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        consumerProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(consumerProps);
 
         // TODO SEND TO PRODUCER
         kafkaConsumer.subscribe(Collections.singleton("result-topic-1"));
         String result = "";
-        ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofSeconds(15));
-        boolean test = consumerRecords==null;
-        logger.info("Records is null: {}", test);
-        logger.info("RECORD COUNT: " + String.valueOf(consumerRecords.count()));
-        for (ConsumerRecord<String, String> record : consumerRecords){
-            System.out.printf("offset = %d, key = %s, value = %s%n", record.offset(), record.key(), record.value());
-            result = "offset =" + record.offset() +  "key =" + record.key() +  "value = " + record.value();
-            logger.info("offset ={}key ={}value = {}", record.offset(), record.key(), record.value());
-            // Process the result
+        int i = 0;
+        while (true){
+            ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofNanos(500000));
+            boolean test = consumerRecords==null;
+            logger.info("Records is null: {}", test);
+            logger.info("RECORD COUNT: " + String.valueOf(consumerRecords.count()));
+            if (!consumerRecords.isEmpty()) {
+                for (ConsumerRecord<String, String> record : consumerRecords) {
+                    System.out.printf("offset = %d, key = %s, value = %s%n", record.offset(), record.key(), record.value());
+                    result = "offset =" + record.offset() + "key =" + record.key() + "value = " + record.value();
+                    logger.info("offset ={}key ={}value = {}", record.offset(), record.key(), record.value());
+                    // Process the result
+                }
+                i++;
+                logger.info("Succeeded on iteration: " + i);
+                break;
+            }
+            i++;
+            logger.info("Failed on iteration: " + i);
         }
         return result;
         // Return the result
