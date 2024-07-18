@@ -1,5 +1,8 @@
 package com.example.serviceconsumer;
 import java.time.Duration;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -43,7 +46,7 @@ public class ConsumerController {
 
         Properties consumerProps = new Properties();
         consumerProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka-1:29092,kafka-2:29093,kafka-3:29094");
-        consumerProps.put(ConsumerConfig.GROUP_ID_CONFIG, "my-group");
+        consumerProps.put(ConsumerConfig.GROUP_ID_CONFIG, "consumer-group");
         consumerProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         consumerProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         kafkaConsumer = new KafkaConsumer<>(consumerProps);
@@ -66,18 +69,23 @@ public class ConsumerController {
         }
         ProducerRecord<String, String> producerRecord = new ProducerRecord<>("topic-1", "key1", json);
         kafkaProducer.send(producerRecord);
-        // Wait for the result on result-topic-1 (not implemented yet)
-
 
         // TODO SEND TO PRODUCER
+
+        try {
+            Thread.sleep(Duration.ofNanos(500000));
+            logger.info("SLEPT 0.5 MS");
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
         kafkaConsumer.subscribe(Collections.singleton("result-topic-1"));
         String result = "";
         int i = 0;
         while (true){
-            ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofNanos(500000));
+            ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofMillis(1));
             boolean test = consumerRecords==null;
             logger.info("Records is null: {}", test);
-            logger.info("RECORD COUNT: " + String.valueOf(consumerRecords.count()));
+            logger.info("RECORD COUNT: {}" , String.valueOf(consumerRecords.count()));
             if (!consumerRecords.isEmpty()) {
                 for (ConsumerRecord<String, String> record : consumerRecords) {
                     System.out.printf("offset = %d, key = %s, value = %s%n", record.offset(), record.key(), record.value());
@@ -86,14 +94,13 @@ public class ConsumerController {
                     // Process the result
                 }
                 i++;
-                logger.info("Succeeded on iteration: " + i);
+                logger.info("Succeeded on iteration: {}", i);
                 break;
             }
             i++;
-            logger.info("Failed on iteration: " + i);
+            logger.info("Failed on iteration: {} " , i);
         }
         return result;
         // Return the result
-        //wait for the result on the result-topic-1
     }
 }
