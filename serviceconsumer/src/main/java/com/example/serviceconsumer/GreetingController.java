@@ -13,8 +13,9 @@ public class GreetingController {
     private Client helloWorldClient;
 
     @GetMapping("/get-greeting")
-    public String greeting() {
-        return helloWorldClient.produce();
+    public String greeting(String message) {
+        return helloWorldClient.produce("msg");
+
     }
 
 }

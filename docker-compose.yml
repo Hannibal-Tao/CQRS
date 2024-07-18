@@ -13,7 +13,12 @@ networks:
     driver: bridge
   kafka:
     driver: bridge
-
+  producer-mongodb:
+    driver: bridge
+  consumer-mongodb:
+    driver: bridge
+volumes:
+  mongodb-data:
 services:
   zookeeper-1:
     image: confluentinc/cp-zookeeper:latest
@@ -82,9 +87,14 @@ services:
       - zookeeper-1
       - zookeeper-2
       - zookeeper-3
+    environment:
+      - MONGO_HOST=mongodb
+      - MONGO_PORT=27017
+      - MONGO_DATABASE=events
     networks:
       - producer
       - producer-zookeeper
+      - producer-mongodb
 
   producer-2:
     hostname: producer-2
@@ -97,9 +107,14 @@ services:
       - zookeeper-1
       - zookeeper-2
       - zookeeper-3
+    environment:
+      - MONGO_HOST=mongodb
+      - MONGO_PORT=27017
+      - MONGO_DATABASE=events
     networks:
       - producer
       - producer-zookeeper
+      - producer-mongodb
 
   producer-3:
     hostname: producer-3
@@ -112,9 +127,14 @@ services:
       - zookeeper-1
       - zookeeper-2
       - zookeeper-3
+    environment:
+      - MONGO_HOST=mongodb
+      - MONGO_PORT=27017
+      - MONGO_DATABASE=events
     networks:
       - producer
       - producer-zookeeper
+      - producer-mongodb
 
   consumer:
     image: service-consumer
@@ -126,10 +146,15 @@ services:
       - zookeeper-1
       - zookeeper-2
       - zookeeper-3
+    environment:
+      - MONGO_HOST=mongodb
+      - MONGO_PORT=27017
+      - MONGO_DATABASE=events
     networks:
-      - consumer
       - consumer-zookeeper
-      - producer-zookeeper
+      - consumer
+      - consumer-mongodb
+
   kafka-1:
     image: confluentinc/cp-kafka:latest
     ports:
@@ -150,7 +175,7 @@ services:
       - kafka
       - producer-zookeeper
       - consumer-zookeeper
- 
+
   kafka-2:
     image: confluentinc/cp-kafka:latest
     ports:
@@ -171,7 +196,7 @@ services:
       - kafka
       - producer-zookeeper
       - consumer-zookeeper
- 
+
   kafka-3:
     image: confluentinc/cp-kafka:latest
     ports:
@@ -204,3 +229,18 @@ services:
     networks:
       - kafka
       - kafka-zookeeper
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+    networks:
+      - producer
+      - consumer
+      - producer-mongodb
+      - consumer-mongodb
+    environment:
+      - MONGO_HOST=mongodb
+      - MONGO_PORT=27017
+      - MONGO_DATABASE=events
