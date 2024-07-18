@@ -14,6 +14,7 @@ public class ServiceProducerApplication {
 
 
 	public static void main(String[] args) {
+		KafkaTopicCreator.createTopics();
 		SpringApplication.run(ServiceProducerApplication.class, args);
 	}
 
