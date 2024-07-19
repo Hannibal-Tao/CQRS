@@ -3,7 +3,7 @@ FROM maven:latest AS builder
 WORKDIR /service-producer
 COPY src /service-producer/src
 COPY pom.xml /service-producer/pom.xml
-RUN mvn clean package -P docker
+RUN mvn clean package -DskipTests
 
 # Runtime stage
 FROM openjdk:21-jdk

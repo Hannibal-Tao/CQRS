@@ -13,6 +13,9 @@ networks:
     driver: bridge
   kafka:
     driver: bridge
+  producer-kafka:
+    driver: bridge
+
   producer-mongodb:
     driver: bridge
   consumer-mongodb:
@@ -94,6 +97,7 @@ services:
     networks:
       - producer
       - producer-zookeeper
+      - producer-kafka
       - producer-mongodb
 
   producer-2:
@@ -114,6 +118,7 @@ services:
     networks:
       - producer
       - producer-zookeeper
+      - producer-kafka
       - producer-mongodb
 
   producer-3:
@@ -134,6 +139,7 @@ services:
     networks:
       - producer
       - producer-zookeeper
+      - producer-kafka
       - producer-mongodb
 
   consumer:
@@ -173,8 +179,9 @@ services:
     networks:
       - kafka-zookeeper
       - kafka
-      - producer-zookeeper
       - consumer-zookeeper
+      - producer-kafka
+
 
   kafka-2:
     image: confluentinc/cp-kafka:latest
@@ -194,8 +201,8 @@ services:
     networks:
       - kafka-zookeeper
       - kafka
-      - producer-zookeeper
       - consumer-zookeeper
+      - producer-kafka
 
   kafka-3:
     image: confluentinc/cp-kafka:latest
@@ -215,8 +222,8 @@ services:
     networks:
       - kafka-zookeeper
       - kafka
-      - producer-zookeeper
       - consumer-zookeeper
+      - producer-kafka
   kafka-ui:
     container_name: kafka-ui
     image: provectuslabs/kafka-ui:latest
