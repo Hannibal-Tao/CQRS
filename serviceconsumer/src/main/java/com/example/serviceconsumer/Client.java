@@ -1,32 +1,24 @@
 package com.example.serviceconsumer;
 
-import com.example.serviceconsumer.config.FeignConfig;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.cloud.openfeign.EnableFeignClients;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import com.example.serviceconsumer.entity.User;
+import com.mongodb.client.*;
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 @Configuration
-@EnableFeignClients
-@EnableDiscoveryClient
 public class Client {
- 
-    @Autowired
-    private TheClient theClient;
 
-    @FeignClient(name = "service-producer-1", configuration = FeignConfig.class)
-    interface TheClient {
- 
-        @RequestMapping(path = "/produce", method = RequestMethod.GET)
-        @ResponseBody
-	    String helloWorld();
+    @Autowired
+    private MongoTemplate mongoTemplate;
+    private MongoCollection<Document> collection;
+
+
+
+    public String produce(String message) {
+        mongoTemplate.insert(User.builder().name("234").build());
+        return message;
     }
-    public String produce() {
-        return theClient.helloWorld();
-    }
+
 }

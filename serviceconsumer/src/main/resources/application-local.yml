@@ -5,3 +5,11 @@ spring:
   cloud:
     zookeeper:
       connect-string: localhost:2181,localhost:2182,localhost:2183
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: "events"
+
+mongo:
+  host: localhost
