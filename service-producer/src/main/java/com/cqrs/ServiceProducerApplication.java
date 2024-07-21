@@ -9,12 +9,8 @@ import org.springframework.integration.zookeeper.config.LeaderInitiatorFactoryBe
 @EnableDiscoveryClient
 @SpringBootApplication
 public class ServiceProducerApplication {
-	@Autowired
-	private LeaderInitiatorFactoryBean leaderInitiator;
-
 
 	public static void main(String[] args) {
-		KafkaTopicCreator.createTopics();
 		SpringApplication.run(ServiceProducerApplication.class, args);
 	}
 

@@ -10,6 +10,8 @@ spring:
       host: localhost
       port: 27017
       database: "events"
+  kafka:
+    bootstrap-servers: "localhost:29092,localhost:29093,localhost:29094"
 
 mongo:
   host: localhost

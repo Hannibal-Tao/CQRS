@@ -1,21 +1,23 @@
 package com.cqrs.config;
 
 import jakarta.annotation.PreDestroy;
+import javax.swing.JFileChooser;
+import lombok.RequiredArgsConstructor;
 import org.apache.curator.framework.CuratorFramework;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.leader.DefaultCandidate;
 import org.springframework.integration.zookeeper.config.LeaderInitiatorFactoryBean;
 import org.springframework.stereotype.Component;
 
-@Component
-public class ProducerConfig {
+@Configuration
+@RequiredArgsConstructor
+public class ZooProducerConfig {
 
-    @Autowired
-    private Leader leader;
+    private final Leader leader;
 
-    @Autowired
-    private CuratorFramework client;
+    private final CuratorFramework client;
 
     @Bean
     public LeaderInitiatorFactoryBean leaderInitiator() {
