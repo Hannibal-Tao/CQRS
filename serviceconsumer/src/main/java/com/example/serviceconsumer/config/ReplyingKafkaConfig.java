@@ -45,7 +45,6 @@ public class ReplyingKafkaConfig {
   @Bean
   public ConcurrentMessageListenerContainer<String, String> repliesContainer(
       ConcurrentKafkaListenerContainerFactory<String, String> containerFactory) {
-
     ConcurrentMessageListenerContainer<String, String> repliesContainer =
         containerFactory.createContainer(resultTopic);
     repliesContainer.getContainerProperties().setGroupId(groupId);

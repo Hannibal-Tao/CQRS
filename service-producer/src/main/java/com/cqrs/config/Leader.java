@@ -43,6 +43,10 @@ public class Leader implements Candidate {
       return this.hostname;
     }
 
+    public boolean isLeader(){
+        return isLeader;
+    }
+
     @Override
     public void onGranted(Context context) throws InterruptedException {
         // Handle the leadership granted event

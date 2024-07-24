@@ -32,15 +32,17 @@ public class KafkaTopicConfig {
   @Bean
   public KafkaAdmin kafkaAdmin() {
     Map<String, Object> configs = new HashMap<>();
-    configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
+    configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka-1:19092,kafka-2:19093,kafka-3:19094");
+    configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+    configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
     return new KafkaAdmin(configs);
   }
 
   @Bean
   public NewTopic commandTopic() {
     return TopicBuilder.name(commandTopic)
-        .partitions(10)
-        .replicas(2)
+        .partitions(1)
+        .replicas(1)
         .build();
   }
 

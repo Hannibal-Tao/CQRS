@@ -5,12 +5,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
+import com.example.serviceconsumer.entity.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+
+import com.mongodb.client.MongoCollection;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -18,8 +21,11 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.bson.Document;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.kafka.requestreply.ReplyingKafkaTemplate;
 import org.springframework.kafka.requestreply.RequestReplyFuture;
 import org.springframework.kafka.support.SendResult;
@@ -43,6 +49,9 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class ConsumerController {
 
     private final ReplyingKafkaTemplate<String, String, String> template;
+    @Autowired
+    private MongoTemplate mongoTemplate;
+    private MongoCollection<Document> collection;
 
     @Value(value = "${kafka.topic.command}")
     private String commandTopic;
@@ -62,10 +71,17 @@ public class ConsumerController {
         RequestReplyFuture<String, String, String> replyFuture = template.sendAndReceive(record);
         SendResult<String, String> sendResult = replyFuture.getSendFuture().get(20, TimeUnit.SECONDS);
         log.info("Sent ok: {}", sendResult.getRecordMetadata());
+        byte[] sendCorrelationID = sendResult.getProducerRecord().headers().lastHeader("kafka_correlationId").value();
         ConsumerRecord<String, String> consumerRecord = replyFuture.get(20, TimeUnit.SECONDS);
-        String result = consumerRecord.value();
-        log.info("Return value: {}", consumerRecord.value());
-        return result;
+        byte[] recCorrelationID = consumerRecord.headers().lastHeader("kafka_correlationId").value();
+        log.info("Template Prod Factory Listeners: {} ", template.getProducerFactory().getListeners());
+        if(Arrays.equals(sendCorrelationID, recCorrelationID)){
+            String result = consumerRecord.value();
+            log.info("Return value: {}", consumerRecord.value());
+            return result;
+        }
+        TimeUnit.SECONDS.sleep(20);
+        return null;
     }
 
 

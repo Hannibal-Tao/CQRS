@@ -1,4 +1,4 @@
-package com.example.serviceconsumer.config;
+package com.cqrs.config;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
@@ -20,8 +20,9 @@ public class SimpleMongoConfig {
     public MongoClient mongo() {
         ConnectionString connectionString = new ConnectionString("mongodb://"+ host + ":27017/test");
         MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
-          .applyConnectionString(connectionString)
-          .build();
+                .applyConnectionString(connectionString)
+                .build();
+
         return MongoClients.create(mongoClientSettings);
     }
 

@@ -17,7 +17,7 @@ public class Client {
 
 
     public String produce(String message) {
-        mongoTemplate.insert(User.builder().name("234").build());
+        mongoTemplate.insert(User.builder().name(message).build());
         return message;
     }
 
