@@ -10,6 +10,7 @@ spring:
       host: mongodb
       port: 27017
       database: "events"
-
+  kafka:
+    bootstrap-servers: "kafka-1:29092,kafka-2:29093,kafka-3:29094"
 mongo:
   host: mongodb
