@@ -28,7 +28,7 @@ public class ZooProducerConfig {
                     //.setRole("leader");
     }
 
-    @PreDestroy
+    //@PreDestroy
     public void destroy() throws Exception {
         client.delete().forPath("/services/service-producer-1/leader-node");
         System.out.println(

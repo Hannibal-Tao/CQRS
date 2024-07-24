@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,13 +36,15 @@ public class KafkaTopicConfig {
     configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka-1:19092,kafka-2:19093,kafka-3:19094");
     configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
     configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+    configs.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, CustomPartitioner.class);
+    configs.put(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, CustomPartitioner.class);
     return new KafkaAdmin(configs);
   }
 
   @Bean
   public NewTopic commandTopic() {
     return TopicBuilder.name(commandTopic)
-        .partitions(1)
+        .partitions(9)
         .replicas(1)
         .build();
   }

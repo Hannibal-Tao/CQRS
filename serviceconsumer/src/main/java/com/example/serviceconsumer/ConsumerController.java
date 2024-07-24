@@ -1,9 +1,6 @@
 package com.example.serviceconsumer;
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 import com.example.serviceconsumer.entity.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -67,7 +64,9 @@ public class ConsumerController {
         if (!template.waitForAssignment(Duration.ofSeconds(10))) {
             throw new IllegalStateException("Reply container did not initialize");
         }
-        ProducerRecord<String, String> record = new ProducerRecord<>(commandTopic, message);
+        Random random = new Random();
+        int randLeaderPartition = random.nextInt(3);
+        ProducerRecord<String, String> record = new ProducerRecord<>(commandTopic, randLeaderPartition,"key", message);
         RequestReplyFuture<String, String, String> replyFuture = template.sendAndReceive(record);
         SendResult<String, String> sendResult = replyFuture.getSendFuture().get(20, TimeUnit.SECONDS);
         log.info("Sent ok: {}", sendResult.getRecordMetadata());
